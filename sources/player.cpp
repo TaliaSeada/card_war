@@ -4,14 +4,17 @@
 using namespace std;
 
 namespace ariel {
-    // default constructor
-    Player::Player(){};
-    // name constructor 
-    Player::Player(string name){
-        if(!name.empty()){
-            (this)->name = name;
-        }
+    Player::Player() {
+        deck.resize(52, nullptr);
     }
+
+    Player::Player(std::string name) {
+        if (!name.empty()) {
+            this->name = name;
+        }
+        deck.resize(52, nullptr);
+    }
+
 
     // get the player's name
     string Player::getName(){
@@ -28,11 +31,11 @@ namespace ariel {
         }
     }
 
-    // add new card to the players stack and increase the size of the stack
-    void Player::addCard(Card* c){
-        (this)->stack[(this)->stackSize] = c;
-        (this)->stackSize++;
+    // add new card to the players deck and increase the size of the deck
+    void Player::addCard(Card* c) {
+        deck.push_back(c);
     }
+
 
     // amount of cards left.
     int Player::stacksize(){
@@ -44,16 +47,16 @@ namespace ariel {
         return (this)->cardsTaken;
     }
 
-    // check if the player's stack empty
+    // check if the player's deck empty
     bool Player::isEmpty(){
         return (this)->stackSize == 0;
     }
         
-    // pull card from the player's stack
-    Card* Player::drawCard(){
-        Card* res = (this)->stack[(this)->stackSize];
-        (this)->stack[(this)->stackSize] = nullptr;
+    // pull card from the player's deck
+    Card* Player::drawCard() {
+        Card* res = deck.back();
+        deck.pop_back();
         return res;
     }
-} 
+}
 

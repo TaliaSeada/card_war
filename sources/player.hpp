@@ -1,6 +1,7 @@
 #pragma once
 #include "card.hpp"
 #include <string>
+#include <vector>
 using namespace std;
 
 namespace ariel {
@@ -9,7 +10,7 @@ namespace ariel {
         int numOfCards;
         int stackSize = 0;
         int cardsTaken = 0;
-        Card* stack[52];
+        std::vector<Card*> deck;
 
         public:
             // default constructor
@@ -23,7 +24,7 @@ namespace ariel {
             // set the player's name
             void setName(string);
 
-            // add new card to the players stack and increase the size of the stack
+            // add new card to the players deck and increase the size of the deck
             void addCard(Card*);
 
             // amount of cards left.
@@ -32,10 +33,10 @@ namespace ariel {
             // amount of cards this player has won.
             int cardesTaken();
 
-            // check if the player's stack empty
+            // check if the player's deck empty
             bool isEmpty();
 
-            // pull card from the player's stack
+            // pull card from the player's deck
             Card* drawCard();
 
     };
