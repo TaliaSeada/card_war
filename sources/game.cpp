@@ -21,8 +21,8 @@ namespace ariel {
     }
 
     // activate next turn
-    void Game::playTurn(){
-
+    int Game::playTurn(){
+        return 1;
     }
 
     // print the last turn stats.
@@ -31,8 +31,8 @@ namespace ariel {
     }
 
     // playes the game untill the end
-    void Game::playAll(){
-        
+    int Game::playAll(){
+        return 1;
     }
 
     // prints the name of the winning player

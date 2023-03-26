@@ -17,13 +17,13 @@ namespace ariel {
             Player* getWinner();
 
             // activate next turn
-            void playTurn();
+            int playTurn();
 
             // print the last turn stats.
             void printLastTurn();
 
             // playes the game untill the end
-            void playAll();
+            int playAll();
 
             // prints the name of the winning player
             void printWiner();
