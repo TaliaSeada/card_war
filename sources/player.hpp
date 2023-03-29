@@ -7,10 +7,10 @@ using namespace std;
 namespace ariel {
     class Player{
         string name;
-        int numOfCards;
-        int stackSize = 0;
-        int cardsTaken = 0;
+        int stackSize;
+        int cardsTaken;
         std::vector<Card*> deck;
+        string stats;
 
         public:
             // default constructor
@@ -38,6 +38,8 @@ namespace ariel {
 
             // pull card from the player's deck
             Card* drawCard();
+
+            std::vector<Card*> getDeck();
 
     };
 

@@ -5,14 +5,16 @@ using namespace std;
 
 namespace ariel {
     Player::Player() {
-        deck.resize(52, nullptr);
+        (this)->stackSize = 0;
+        (this)->cardsTaken = 0;
     }
 
     Player::Player(std::string name) {
         if (!name.empty()) {
             this->name = name;
         }
-        deck.resize(52, nullptr);
+        (this)->stackSize = 0;
+        (this)->cardsTaken = 0;
     }
 
 
@@ -33,6 +35,7 @@ namespace ariel {
 
     // add new card to the players deck and increase the size of the deck
     void Player::addCard(Card* c) {
+        (this)->stackSize++;
         deck.push_back(c);
     }
 
@@ -54,9 +57,14 @@ namespace ariel {
         
     // pull card from the player's deck
     Card* Player::drawCard() {
-        Card* res = deck.back();
-        deck.pop_back();
+        Card* res = *((this)->deck.begin());
+        (this)->deck.erase((this)->deck.begin());
+        (this)->stackSize--;
         return res;
+    }
+
+    std::vector<Card*> Player::getDeck(){
+        return (this)->deck;
     }
 }
 
