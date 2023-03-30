@@ -58,22 +58,24 @@ namespace ariel {
             Card* p1_c = p1.drawCard();
             Card* p2_c = p2.drawCard();
 
-            cout << p1_c->getValue()<<endl;
-            cout << p2_c->getValue()<<endl;
+            cout << p1_c->getValue() << endl;
+            cout << p2_c->getValue() << endl;
             
             if(p1_c->getValue() > p2_c->getValue()){
+                // cout << "P1" << endl;
                 // p1 wins the turn
                 p1.addCard(p1_c);
                 p1.addCard(p2_c);
             }
             else if(p1_c->getValue() < p2_c->getValue()){
+                // cout << "P2" << endl;
                 // p2 wins the turn
                 p2.addCard(p1_c);
                 p2.addCard(p2_c);
             }
             else{
                 // war
-                return 2;
+                (this)->War();
             }
         }
         else if(p1.stacksize() == 0){
@@ -96,19 +98,15 @@ namespace ariel {
     void Game::War(){
         cout<<"WAR"<<endl;
 
+
     }
 
     // playes the game untill the end
     int Game::playAll(){
         // play all turns
-        int res;
-        while((res = (this)->playTurn()) != 0){
-            // war 
-            if(res == 2){
-                // (this)->War();
-                break;
-            }
-            // if res = 1 someone won the turn
+        int res = 1;
+        while((res) != 0){
+            res = (this)->playTurn();
         }
 
         // set winner
@@ -117,6 +115,9 @@ namespace ariel {
         }
         else if(p2.stacksize() == 0){
             (this)->winner = p1;
+        }
+        else{
+            cout << "Tie!" << endl;
         }
 
         // delete all allocated memory
