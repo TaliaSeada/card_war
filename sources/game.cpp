@@ -58,14 +58,22 @@ namespace ariel {
             // draw card from each and play
             Card* p1_c = p1->drawCard();
             Card* p2_c = p2->drawCard();
-
+    
             // p1_c->printCard();
             // p2_c->printCard();
 
             // cout << p1_c->getValue() << endl;
             // cout << p2_c->getValue() << endl;
-            
-            if(p1_c->getValue() > p2_c->getValue()){
+
+            // Ace wins all except 2
+            if(p1_c->getValue() == 1 && p2_c->getValue() != 2){
+                p1->takeCard();
+            }
+            else if(p2_c->getValue() == 1 && p1_c->getValue() != 2){
+                p2->takeCard();
+            }
+            // all other cases the bigger value wins
+            else if(p1_c->getValue() > p2_c->getValue()){
                 // cout << "P1" << endl;
                 // p1 wins the turn
                 p1->takeCard();
@@ -149,10 +157,6 @@ namespace ariel {
             // cout << p2.getName() << " lost" << endl;
             (this)->winner = p1;
         }
-        else{
-            (this)->winner->setName("Tie!");
-        }
-
         return 1;
     }
 
