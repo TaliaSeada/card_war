@@ -29,7 +29,7 @@ namespace ariel {
     int Card::getValue(){
         std::string values[] = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
         for(int i = 0; i < 13; i++){
-            if((this)->value.compare(values[i])){
+            if((this)->value.compare(values[i]) == 0){
                 return i+1;
             }
         }

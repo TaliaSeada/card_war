@@ -17,7 +17,6 @@ namespace ariel {
         (this)->cardsTaken = 0;
     }
 
-
     // get the player's name
     string Player::getName(){
         return (this)->name;
@@ -50,6 +49,10 @@ namespace ariel {
         return (this)->cardsTaken;
     }
 
+    void Player::takeCard(){
+        (this)->cardsTaken++;
+    }
+
     // check if the player's deck empty
     bool Player::isEmpty(){
         return (this)->stackSize == 0;
@@ -57,8 +60,8 @@ namespace ariel {
         
     // pull card from the player's deck
     Card* Player::drawCard() {
-        Card* res = *((this)->deck.begin());
-        (this)->deck.erase((this)->deck.begin());
+        Card* res = ((this)->deck.back());
+        (this)->deck.pop_back();
         (this)->stackSize--;
         return res;
     }

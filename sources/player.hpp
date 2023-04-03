@@ -33,6 +33,9 @@ namespace ariel {
             // amount of cards this player has won.
             int cardesTaken();
 
+            // increase amount of cards this player has won.
+            void takeCard();
+
             // check if the player's deck empty
             bool isEmpty();
 

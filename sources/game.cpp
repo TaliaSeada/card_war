@@ -12,13 +12,13 @@ namespace ariel {
     // default constructor 
     Game::Game(){};
     // players constructor 
-    Game::Game(Player p1, Player p2){
+    Game::Game(Player& p1, Player& p2){
         if(!p1.getName().empty() && !p1.getName().empty()){
-            (this)->p1 = p1;
-            (this)->p2 = p2;
+            (this)->p1 = &p1;
+            (this)->p2 = &p2;
         }
         (this)->set();
-        (this)->winner.setName("No Winner Yet");
+        (this)->winner = nullptr;
     }
     
     // set new game
@@ -38,52 +38,51 @@ namespace ariel {
 
         // deal the cards to the players
         for (int i = 0; i < 26; i++) {
-            (this)->p1.addCard((this)->stack.back()); 
+            (this)->p1->addCard((this)->stack.back()); 
             (this)->stack.pop_back(); 
 
-            (this)->p2.addCard((this)->stack.back()); 
+            (this)->p2->addCard((this)->stack.back()); 
             (this)->stack.pop_back();
         }
+
     }
 
     // returns a pointer to the winner
     Player* Game::getWinner(){
-        return &(this)->winner;
+        return (this)->winner;
     }
 
     // activate next turn
     int Game::playTurn(){
-        if(p1.stacksize() > 0 && p2.stacksize() > 0){
+        if(p1->stacksize() > 0 && p2->stacksize() > 0){
             // draw card from each and play
-            Card* p1_c = p1.drawCard();
-            Card* p2_c = p2.drawCard();
+            Card* p1_c = p1->drawCard();
+            Card* p2_c = p2->drawCard();
 
-            cout << p1_c->getValue() << endl;
-            cout << p2_c->getValue() << endl;
+            // p1_c->printCard();
+            // p2_c->printCard();
+
+            // cout << p1_c->getValue() << endl;
+            // cout << p2_c->getValue() << endl;
             
             if(p1_c->getValue() > p2_c->getValue()){
                 // cout << "P1" << endl;
                 // p1 wins the turn
-                p1.addCard(p1_c);
-                p1.addCard(p2_c);
+                p1->takeCard();
             }
             else if(p1_c->getValue() < p2_c->getValue()){
                 // cout << "P2" << endl;
                 // p2 wins the turn
-                p2.addCard(p1_c);
-                p2.addCard(p2_c);
+                p2->takeCard();
             }
             else{
                 // war
-                (this)->War();
+                int cards = 2; // #cards on the desk
+                (this)->War(p1_c, p2_c, cards);
             }
         }
-        else if(p1.stacksize() == 0){
-            cout << p1.getName() << " lost" << endl;
-            return 0;
-        }
-        else if(p2.stacksize() == 0){
-            cout << p2.getName() << " lost" << endl;
+        else{
+            // throw "Game Over";
             return 0;
         }
 
@@ -95,9 +94,41 @@ namespace ariel {
 
     }
     
-    void Game::War(){
-        cout<<"WAR"<<endl;
+    void Game::War(Card* p1_c, Card* p2_c, int cards){
+        // cout<<"WAR!"<<endl;
+        while(p1_c->getValue() == p2_c->getValue()){
+            if(p1->stacksize() > 0 && p2->stacksize() > 0){
+                // upside down card
+                p1->drawCard();
+                p2->drawCard();
+                cards += 2; // add 2 cards
 
+                // draw card from each and play
+                p1_c = p1->drawCard();
+                p2_c = p2->drawCard();
+                cards += 2; // add 2 cards
+                
+                if(p1_c->getValue() > p2_c->getValue()){
+                    // p1 wins the war - need to take in all the cards that on the desk 
+                    for(int i = 0; i < cards; i++){
+                        p1->takeCard();
+                    }
+                }
+                else if(p1_c->getValue() < p2_c->getValue()){
+                    // p2 wins the war - need to take in all the cards that on the desk 
+                    for(int i = 0; i < cards; i++){
+                        p2->takeCard();
+                    }
+                }
+                else{
+                    continue; // the war is still going
+                }
+            }
+            else{
+                cout << "Run out of cards" << endl;
+                break;
+            }
+        }
 
     }
 
@@ -110,28 +141,30 @@ namespace ariel {
         }
 
         // set winner
-        if(p1.stacksize() == 0){
+        if(p1->cardesTaken() < p2->cardesTaken()){
+            // cout << p1.getName() << " lost" << endl;
             (this)->winner = p2;
         }
-        else if(p2.stacksize() == 0){
+        else if(p2->cardesTaken() < p1->cardesTaken()){
+            // cout << p2.getName() << " lost" << endl;
             (this)->winner = p1;
         }
         else{
-            cout << "Tie!" << endl;
+            (this)->winner->setName("Tie!");
         }
 
-        // delete all allocated memory
-        for (int i = 0; i < (this)->winner.getDeck().size(); i++) {
-            Card* card = (this)->getWinner()->drawCard();
-            delete card;
-        }
         return 1;
     }
 
     // prints the name of the winning player
     void Game::printWiner(){
-        string res = (this)->winner.getName();
-        cout << &res << endl;
+        if((this)->winner != nullptr){
+            string res = (this)->winner->getName();
+            cout << "The Winner Is: " << res << endl;
+        }
+        else{
+            cout << "Tie!" << endl;
+        }
     }
 
     // prints all the turns played one line per turn
