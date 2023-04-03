@@ -58,18 +58,14 @@ namespace ariel {
             // draw card from each and play
             Card* p1_c = p1->drawCard();
             Card* p2_c = p2->drawCard();
-    
-            // p1_c->printCard();
-            // p2_c->printCard();
-
-            // cout << p1_c->getValue() << endl;
-            // cout << p2_c->getValue() << endl;
 
             // Ace wins all except 2
             if(p1_c->getValue() == 1 && p2_c->getValue() != 2){
                 p1->takeCard();
+                p1->takeCard();
             }
             else if(p2_c->getValue() == 1 && p1_c->getValue() != 2){
+                p2->takeCard();
                 p2->takeCard();
             }
             // all other cases the bigger value wins
@@ -77,10 +73,12 @@ namespace ariel {
                 // cout << "P1" << endl;
                 // p1 wins the turn
                 p1->takeCard();
+                p1->takeCard();
             }
             else if(p1_c->getValue() < p2_c->getValue()){
                 // cout << "P2" << endl;
                 // p2 wins the turn
+                p2->takeCard();
                 p2->takeCard();
             }
             else{
@@ -88,12 +86,12 @@ namespace ariel {
                 int cards = 2; // #cards on the desk
                 (this)->War(p1_c, p2_c, cards);
             }
+            delete p1_c;
+            delete p2_c;
         }
         else{
-            // throw "Game Over";
             return 0;
         }
-
         return 1;
     }
 
@@ -105,10 +103,10 @@ namespace ariel {
     void Game::War(Card* p1_c, Card* p2_c, int cards){
         // cout<<"WAR!"<<endl;
         while(p1_c->getValue() == p2_c->getValue()){
-            if(p1->stacksize() > 0 && p2->stacksize() > 0){
+            if(p1->stacksize() > 1 && p2->stacksize() > 1){
                 // upside down card
-                p1->drawCard();
-                p2->drawCard();
+                delete (p1->drawCard());
+                delete (p2->drawCard());
                 cards += 2; // add 2 cards
 
                 // draw card from each and play
@@ -133,8 +131,12 @@ namespace ariel {
                 }
             }
             else{
+                if(p1->stacksize() == 1 && p2->stacksize() == 1){
+                    p1->takeCard();
+                    p2->takeCard();
+                }
                 cout << "Run out of cards" << endl;
-                break;
+                return;
             }
         }
 
@@ -150,11 +152,9 @@ namespace ariel {
 
         // set winner
         if(p1->cardesTaken() < p2->cardesTaken()){
-            // cout << p1.getName() << " lost" << endl;
             (this)->winner = p2;
         }
         else if(p2->cardesTaken() < p1->cardesTaken()){
-            // cout << p2.getName() << " lost" << endl;
             (this)->winner = p1;
         }
         return 1;
