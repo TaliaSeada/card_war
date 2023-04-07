@@ -6,6 +6,7 @@ namespace ariel {
         Player* p1;
         Player* p2;
         Player* winner;
+        int drawRate;
         std::vector<string> log;
         std::vector<Card*> stack;
 

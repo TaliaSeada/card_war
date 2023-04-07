@@ -17,6 +17,7 @@ namespace ariel {
             (this)->p1 = &p1;
             (this)->p2 = &p2;
         }
+        (this)->drawRate = 0;
         (this)->set();
         (this)->winner = nullptr;
     }
@@ -66,11 +67,13 @@ namespace ariel {
             // Ace wins all except 2
             if(p1_c->getValue() == 1 && p2_c->getValue() != 2){
                 turnWinner = p1->getName();
+                p1->winrate()++;
                 p1->takeCard();
                 p1->takeCard();
             }
             else if(p2_c->getValue() == 1 && p1_c->getValue() != 2){
                 turnWinner = p2->getName();
+                p2->winrate()++;
                 p2->takeCard();
                 p2->takeCard();
             }
@@ -78,17 +81,20 @@ namespace ariel {
             else if(p1_c->getValue() > p2_c->getValue()){
                 // p1 wins the turn
                 turnWinner = p1->getName();
+                p1->winrate()++;
                 p1->takeCard();
                 p1->takeCard();
             }
             else if(p1_c->getValue() < p2_c->getValue()){
                 // p2 wins the turn
                 turnWinner = p2->getName();
+                p2->winrate()++;
                 p2->takeCard();
                 p2->takeCard();
             }
             else{
                 // war
+                (this)->drawRate++;
                 int cards = 2; // #cards on the desk
                 turnWinner = (this)->War(p1_c, p2_c, cards);
             }
@@ -131,6 +137,7 @@ namespace ariel {
                         p1->takeCard();
                     }
                     turnWinner = p1->getName();
+                    p1->winrate()++;
                 }
                 else if(p1_c->getValue() < p2_c->getValue()){
                     // p2 wins the war - need to take in all the cards that on the desk 
@@ -138,8 +145,10 @@ namespace ariel {
                         p2->takeCard();
                     }
                     turnWinner = p2->getName();
+                    p2->winrate()++;
                 }
                 else{
+                    (this)->drawRate++;
                     continue; // the war is still going
                 }
             }
@@ -151,7 +160,7 @@ namespace ariel {
                     }
                 }
                 cout << "Run out of cards" << endl;
-                // return;
+                return turnWinner;
             }
         }
         return turnWinner;
@@ -197,6 +206,19 @@ namespace ariel {
     // for each player prints basic statistics: win rate, cards won, <other stats you want to print>.
     // Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws. )
     void Game::printStats(){
+        cout << "\n" << p1->getName() << ":\n" 
+        << "win rate: " << ((double)p1->winrate()/(p1->winrate()+p2->winrate())*100) << "%\n" 
+        << "cards won: " << p1->cardesTaken()
+        << endl;  
 
+        cout << "\n" << p2->getName() << ":\n" 
+        << "win rate: " << ((double)p2->winrate()/(p1->winrate()+p2->winrate())*100) << "%\n" 
+        << "cards won: " << p2->cardesTaken()
+        << endl;  
+
+        cout << "\ndraw rate: " << ((double) (this)->drawRate/(p1->winrate()+p2->winrate()))*100 << "%\n" 
+        << "amount of draws: " << (this)->drawRate
+        << endl; 
+        
     }
 } 

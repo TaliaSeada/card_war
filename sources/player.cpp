@@ -8,6 +8,7 @@ namespace ariel {
         (this)->stackSize = 0;
         (this)->cardsTaken = 0;
         (this)->winRate = 0;
+        (this)->drawRate = 0;
     }
 
     Player::Player(std::string name) {
@@ -17,6 +18,7 @@ namespace ariel {
         (this)->stackSize = 0;
         (this)->cardsTaken = 0;
         (this)->winRate = 0;
+        (this)->drawRate = 0;
     }
 
     // get the player's name
@@ -49,6 +51,10 @@ namespace ariel {
     // amount of cards this player has won.
     int Player::cardesTaken(){
         return (this)->cardsTaken;
+    }
+
+    int& Player::winrate(){
+        return (this)->winRate;
     }
 
     void Player::takeCard(){

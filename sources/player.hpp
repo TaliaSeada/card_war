@@ -11,7 +11,7 @@ namespace ariel {
         int cardsTaken;
         std::vector<Card*> deck;
         int winRate;
-        std::vector<string> stats;
+        int drawRate;        
 
         public:
             // default constructor
@@ -33,6 +33,8 @@ namespace ariel {
 
             // amount of cards this player has won.
             int cardesTaken();
+
+            int& winrate();
 
             // increase amount of cards this player has won.
             void takeCard();
