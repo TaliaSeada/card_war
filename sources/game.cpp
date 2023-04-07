@@ -57,6 +57,7 @@ namespace ariel {
         if(p1==p2){
             throw std::runtime_error("One Player");
         }
+        string turnWinner = "";
         if(p1->stacksize() > 0 && p2->stacksize() > 0){
             // draw card from each and play
             Card* p1_c = p1->drawCard();
@@ -64,45 +65,54 @@ namespace ariel {
 
             // Ace wins all except 2
             if(p1_c->getValue() == 1 && p2_c->getValue() != 2){
+                turnWinner = p1->getName();
                 p1->takeCard();
                 p1->takeCard();
             }
             else if(p2_c->getValue() == 1 && p1_c->getValue() != 2){
+                turnWinner = p2->getName();
                 p2->takeCard();
                 p2->takeCard();
             }
             // all other cases the bigger value wins
             else if(p1_c->getValue() > p2_c->getValue()){
                 // p1 wins the turn
+                turnWinner = p1->getName();
                 p1->takeCard();
                 p1->takeCard();
             }
             else if(p1_c->getValue() < p2_c->getValue()){
                 // p2 wins the turn
+                turnWinner = p2->getName();
                 p2->takeCard();
                 p2->takeCard();
             }
             else{
                 // war
                 int cards = 2; // #cards on the desk
-                (this)->War(p1_c, p2_c, cards);
+                turnWinner = (this)->War(p1_c, p2_c, cards);
             }
+            // add winner to log
+            (this)->log.push_back(p1->getName() + " played " + p1_c->stringValue() + " of " + p1_c->stringSuit()
+            + " " + p2->getName() + " played " + p2_c->stringValue() + " of " + p2_c->stringSuit()
+            + ". " + turnWinner + " wins.");
+
+            // deal with allocated memory
             delete p1_c;
             delete p2_c;
         }
         else{
             throw std::runtime_error("No More Turns");
-            // return 0;
         }
     }
 
     // print the last turn stats.
     void Game::printLastTurn(){
-
+        cout << log.back() << endl;
     }
     
-    void Game::War(Card* p1_c, Card* p2_c, int cards){
-        // cout<<"WAR!"<<endl;
+    string Game::War(Card* p1_c, Card* p2_c, int cards){
+        string turnWinner = "";
         while(p1_c->getValue() == p2_c->getValue()){
             if(p1->stacksize() > 1 && p2->stacksize() > 1){
                 // upside down card
@@ -120,12 +130,14 @@ namespace ariel {
                     for(int i = 0; i < cards; i++){
                         p1->takeCard();
                     }
+                    turnWinner = p1->getName();
                 }
                 else if(p1_c->getValue() < p2_c->getValue()){
                     // p2 wins the war - need to take in all the cards that on the desk 
                     for(int i = 0; i < cards; i++){
                         p2->takeCard();
                     }
+                    turnWinner = p2->getName();
                 }
                 else{
                     continue; // the war is still going
@@ -139,10 +151,10 @@ namespace ariel {
                     }
                 }
                 cout << "Run out of cards" << endl;
-                return;
+                // return;
             }
         }
-
+        return turnWinner;
     }
 
     // playes the game untill the end
@@ -167,7 +179,8 @@ namespace ariel {
     void Game::printWiner(){
         if((this)->winner != nullptr){
             string res = (this)->winner->getName();
-            cout << "The Winner Is: " << res << endl;
+            // cout << "The Winner Is: " << res << endl;
+            cout << res << endl;
         }
         else{
             cout << "Tie!" << endl;
@@ -176,7 +189,9 @@ namespace ariel {
 
     // prints all the turns played one line per turn
     void Game::printLog(){
-
+        for (std::vector<std::string>::size_type i = 0; i < log.size(); i++) {
+            std::cout << log.at(i) << endl;
+        }
     }
 
     // for each player prints basic statistics: win rate, cards won, <other stats you want to print>.

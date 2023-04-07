@@ -35,4 +35,11 @@ namespace ariel {
         }
         return -1;
     }
+
+    std::string Card::stringValue(){
+        return (this)->value;
+    }
+    std::string Card::stringSuit(){
+        return (this)->suit;
+    }
 }

@@ -21,6 +21,10 @@ namespace ariel {
             // get the card value
             int getValue();
 
+            std::string stringValue();
+            std::string stringSuit();
+
+
     };
 }
 

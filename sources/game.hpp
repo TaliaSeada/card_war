@@ -6,7 +6,7 @@ namespace ariel {
         Player* p1;
         Player* p2;
         Player* winner;
-        string log;
+        std::vector<string> log;
         std::vector<Card*> stack;
 
         public:
@@ -40,6 +40,6 @@ namespace ariel {
             // Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws)
             void printStats();
 
-            void War(Card*, Card*, int);
+            string War(Card*, Card*, int);
     };
 }

@@ -10,7 +10,8 @@ namespace ariel {
         int stackSize;
         int cardsTaken;
         std::vector<Card*> deck;
-        string stats;
+        int winRate;
+        std::vector<string> stats;
 
         public:
             // default constructor
