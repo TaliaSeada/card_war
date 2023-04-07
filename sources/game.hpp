@@ -22,7 +22,7 @@ namespace ariel {
             Player* getWinner();
 
             // activate next turn
-            int playTurn();
+            void playTurn();
 
             // print the last turn stats.
             void printLastTurn();

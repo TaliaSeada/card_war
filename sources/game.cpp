@@ -53,7 +53,10 @@ namespace ariel {
     }
 
     // activate next turn
-    int Game::playTurn(){
+    void Game::playTurn(){
+        if(p1==p2){
+            throw std::runtime_error("One Player");
+        }
         if(p1->stacksize() > 0 && p2->stacksize() > 0){
             // draw card from each and play
             Card* p1_c = p1->drawCard();
@@ -70,13 +73,11 @@ namespace ariel {
             }
             // all other cases the bigger value wins
             else if(p1_c->getValue() > p2_c->getValue()){
-                // cout << "P1" << endl;
                 // p1 wins the turn
                 p1->takeCard();
                 p1->takeCard();
             }
             else if(p1_c->getValue() < p2_c->getValue()){
-                // cout << "P2" << endl;
                 // p2 wins the turn
                 p2->takeCard();
                 p2->takeCard();
@@ -90,9 +91,9 @@ namespace ariel {
             delete p2_c;
         }
         else{
-            return 0;
+            throw std::runtime_error("No More Turns");
+            // return 0;
         }
-        return 1;
     }
 
     // print the last turn stats.
@@ -130,10 +131,12 @@ namespace ariel {
                     continue; // the war is still going
                 }
             }
-            else{
+            else{ // each player takes his/hers cards
                 if(p1->stacksize() == 1 && p2->stacksize() == 1){
-                    p1->takeCard();
-                    p2->takeCard();
+                    for(int i = 0; i < cards/2; i++){
+                        p1->takeCard();
+                        p2->takeCard();
+                    }
                 }
                 cout << "Run out of cards" << endl;
                 return;
@@ -145,9 +148,9 @@ namespace ariel {
     // playes the game untill the end
     int Game::playAll(){
         // play all turns
-        int res = 1;
-        while((res) != 0){
-            res = (this)->playTurn();
+        // int res = 1;
+        while(p1->stacksize() > 0 && p2->stacksize() > 0){
+            (this)->playTurn();
         }
 
         // set winner
