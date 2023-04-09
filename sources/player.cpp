@@ -37,7 +37,7 @@ namespace ariel {
     }
 
     // add new card to the players deck and increase the size of the deck
-    void Player::addCard(Card* c) {
+    void Player::addCard(Card c) {
         (this)->stackSize++;
         deck.push_back(c);
     }
@@ -67,14 +67,14 @@ namespace ariel {
     }
         
     // pull card from the player's deck
-    Card* Player::drawCard() {
-        Card* res = ((this)->deck.back());
+    Card Player::drawCard() {
+        Card res = ((this)->deck.back());
         (this)->deck.pop_back();
         (this)->stackSize--;
         return res;
     }
 
-    std::vector<Card*> Player::getDeck(){
+    std::vector<Card> Player::getDeck(){
         return (this)->deck;
     }
 }

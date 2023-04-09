@@ -9,7 +9,7 @@ namespace ariel {
         string name;
         int stackSize;
         int cardsTaken;
-        std::vector<Card*> deck;
+        std::vector<Card> deck;
         int winRate;
         int drawRate;        
 
@@ -26,7 +26,7 @@ namespace ariel {
             void setName(string);
 
             // add new card to the players deck and increase the size of the deck
-            void addCard(Card*);
+            void addCard(Card);
 
             // amount of cards left.
             int stacksize();
@@ -43,9 +43,9 @@ namespace ariel {
             bool isEmpty();
 
             // pull card from the player's deck
-            Card* drawCard();
+            Card drawCard();
 
-            std::vector<Card*> getDeck();
+            std::vector<Card> getDeck();
 
     };
 

@@ -29,7 +29,7 @@ namespace ariel {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 13; j++) {
-                (this)->stack.push_back(new Card(values[j], suits[i]));
+                (this)->stack.push_back(Card(values[j], suits[i]));
             }
         }
 
@@ -61,32 +61,17 @@ namespace ariel {
         string turnWinner = "";
         if(p1->stacksize() > 0 && p2->stacksize() > 0){
             // draw card from each and play
-            Card* p1_c = p1->drawCard();
-            Card* p2_c = p2->drawCard();
+            Card p1_c = p1->drawCard();
+            Card p2_c = p2->drawCard();
 
             // Ace wins all except 2
-            if(p1_c->getValue() == 1 && p2_c->getValue() != 2){
+            if((p1_c.getValue() == 1 && p2_c.getValue() != 2) || (p1_c.getValue() > p2_c.getValue())){
                 turnWinner = p1->getName();
                 p1->winrate()++;
                 p1->takeCard();
                 p1->takeCard();
             }
-            else if(p2_c->getValue() == 1 && p1_c->getValue() != 2){
-                turnWinner = p2->getName();
-                p2->winrate()++;
-                p2->takeCard();
-                p2->takeCard();
-            }
-            // all other cases the bigger value wins
-            else if(p1_c->getValue() > p2_c->getValue()){
-                // p1 wins the turn
-                turnWinner = p1->getName();
-                p1->winrate()++;
-                p1->takeCard();
-                p1->takeCard();
-            }
-            else if(p1_c->getValue() < p2_c->getValue()){
-                // p2 wins the turn
+            else if((p2_c.getValue() == 1 && p1_c.getValue() != 2) || (p1_c.getValue() < p2_c.getValue())){
                 turnWinner = p2->getName();
                 p2->winrate()++;
                 p2->takeCard();
@@ -99,13 +84,10 @@ namespace ariel {
                 turnWinner = (this)->War(p1_c, p2_c, cards);
             }
             // add winner to log
-            (this)->log.push_back(p1->getName() + " played " + p1_c->stringValue() + " of " + p1_c->stringSuit()
-            + " " + p2->getName() + " played " + p2_c->stringValue() + " of " + p2_c->stringSuit()
+            (this)->log.push_back(p1->getName() + " played " + p1_c.stringValue() + " of " + p1_c.stringSuit()
+            + " " + p2->getName() + " played " + p2_c.stringValue() + " of " + p2_c.stringSuit()
             + ". " + turnWinner + " wins.");
 
-            // deal with allocated memory
-            delete p1_c;
-            delete p2_c;
         }
         else{
             throw std::runtime_error("No More Turns");
@@ -117,13 +99,13 @@ namespace ariel {
         cout << log.back() << endl;
     }
     
-    string Game::War(Card* p1_c, Card* p2_c, int cards){
+    string Game::War(Card p1_c, Card p2_c, int cards){
         string turnWinner = "";
-        while(p1_c->getValue() == p2_c->getValue()){
+        while(p1_c.getValue() == p2_c.getValue()){
             if(p1->stacksize() > 1 && p2->stacksize() > 1){
                 // upside down card
-                delete (p1->drawCard());
-                delete (p2->drawCard());
+                p1->drawCard();
+                p2->drawCard();
                 cards += 2; // add 2 cards
 
                 // draw card from each and play
@@ -131,7 +113,7 @@ namespace ariel {
                 p2_c = p2->drawCard();
                 cards += 2; // add 2 cards
                 
-                if(p1_c->getValue() > p2_c->getValue()){
+                if(p1_c.getValue() > p2_c.getValue()){
                     // p1 wins the war - need to take in all the cards that on the desk 
                     for(int i = 0; i < cards; i++){
                         p1->takeCard();
@@ -139,7 +121,7 @@ namespace ariel {
                     turnWinner = p1->getName();
                     p1->winrate()++;
                 }
-                else if(p1_c->getValue() < p2_c->getValue()){
+                else if(p1_c.getValue() < p2_c.getValue()){
                     // p2 wins the war - need to take in all the cards that on the desk 
                     for(int i = 0; i < cards; i++){
                         p2->takeCard();
@@ -153,11 +135,9 @@ namespace ariel {
                 }
             }
             else{ // each player takes his/hers cards
-                if(p1->stacksize() == 1 && p2->stacksize() == 1){
-                    for(int i = 0; i < cards/2; i++){
-                        p1->takeCard();
-                        p2->takeCard();
-                    }
+                for(int i = 0; i < cards/2; i++){
+                    p1->takeCard();
+                    p2->takeCard();
                 }
                 cout << "Run out of cards" << endl;
                 return turnWinner;
@@ -169,7 +149,6 @@ namespace ariel {
     // playes the game untill the end
     int Game::playAll(){
         // play all turns
-        // int res = 1;
         while(p1->stacksize() > 0 && p2->stacksize() > 0){
             (this)->playTurn();
         }

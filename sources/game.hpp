@@ -8,7 +8,7 @@ namespace ariel {
         Player* winner;
         int drawRate;
         std::vector<string> log;
-        std::vector<Card*> stack;
+        std::vector<Card> stack;
 
         public:
             // default constructor 
@@ -41,6 +41,6 @@ namespace ariel {
             // Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws)
             void printStats();
 
-            string War(Card*, Card*, int);
+            string War(Card, Card, int);
     };
 }
